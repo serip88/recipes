@@ -1,11 +1,12 @@
 package main
 
 import (
+	"log" // Package for logging errors
+
 	"github.com/gofiber/fiber/v2"                    // Importing the fiber package for handling HTTP requests
 	"github.com/gofiber/fiber/v2/middleware/cors"    // Middleware for handling Cross-Origin Resource Sharing (CORS)
 	"github.com/gofiber/fiber/v2/middleware/favicon" // Middleware for serving favicon
 	"github.com/gofiber/fiber/v2/middleware/logger"  // Middleware for logging HTTP requests
-	"log"                                            // Package for logging errors
 )
 
 func main() {
@@ -16,9 +17,17 @@ func main() {
 	app.Use(logger.New())  // Use logger middleware to log HTTP requests
 
 	// Define a GET route for the path '/hello'
-	app.Get("/hello", func(c *fiber.Ctx) error {
-		return c.SendString("World!") // Send a response when the route is accessed
-	})
+	app.Get("/hello", hello)
+	// 404 Handler
+	app.Use(notFound)
 
-	log.Fatal(app.Listen(":5000")) // Start the server on port 5000 and log any errors
+	log.Fatal(app.Listen(":5001")) // Start the server on port 5000 and log any errors
+}
+
+// Handler
+func hello(c *fiber.Ctx) error {
+	return c.SendString("I made a ☕ for you!")
+}
+func notFound(c *fiber.Ctx) error {
+	return c.SendStatus(404) // => 404 "Not Found"
 }
