@@ -1,23 +1,28 @@
-# Dựa trên một base image Go phù hợp với phiên bản Go của bạn
-FROM golang:1.20-alpine
+#GPT
+# Stage 1: Build the Go application
+FROM golang:1.20-alpine AS builder
 
-# Thiết lập thư mục làm việc trong container
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy gói go.mod và go.sum để quản lý dependency
+# Copy go.mod and go.sum to the container and download dependencies
 COPY go.mod go.sum ./
-
-# Tải về các dependency
 RUN go mod download
 
-# Copy toàn bộ source code vào thư mục làm việc
+# Copy the rest of the application source code to the container
 COPY . .
 
-# Xây dựng ứng dụng
-RUN go build -o main .
+# Build the Go application from the cmd directory
+RUN go build -o /go/bin/myapp ./cmd/main.go
 
-# Thiết lập cổng để chạy ứng dụng
-EXPOSE 3000
+# Stage 2: Create a smaller image for running the Go application
+FROM alpine:3.18
 
-# Command để chạy ứng dụng khi container khởi động
-CMD ["./main"]
+# Copy the built Go binary from the builder stage
+COPY --from=builder /go/bin/myapp /usr/local/bin/myapp
+
+# Set the entrypoint to run the application
+ENTRYPOINT ["/usr/local/bin/myapp"]
+
+# Expose the port the application is running on (if necessary, e.g., port 8080)
+EXPOSE 8080
