@@ -1,16 +1,23 @@
-FROM golang:1.23.1@sha256:2fe82a3f3e006b4f2a316c6a21f62b66e1330ae211d039bb8d1128e12ed57bf1
+# Dựa trên một base image Go phù hợp với phiên bản Go của bạn
+FROM golang:1.20-alpine
 
-# Enviroment variable
-WORKDIR /usr/src/some-api
+# Thiết lập thư mục làm việc trong container
+WORKDIR /app
 
-RUN go install github.com/air-verse/air@latest
+# Copy gói go.mod và go.sum để quản lý dependency
+COPY go.mod go.sum ./
 
-#Copying files to work directory
-COPY go.mod ./
-RUN go mod download && go mod verify
+# Tải về các dependency
+RUN go mod download
+
+# Copy toàn bộ source code vào thư mục làm việc
 COPY . .
 
-# Run and expose the server on port 3000
+# Xây dựng ứng dụng
+RUN go build -o main .
+
+# Thiết lập cổng để chạy ứng dụng
 EXPOSE 3000
 
-# CMD [ "nodemon", "build/app.js" ]
+# Command để chạy ứng dụng khi container khởi động
+CMD ["./main"]
