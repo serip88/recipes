@@ -3,6 +3,9 @@ package main
 import (
 	"log" // Package for logging errors
 
+	"yendoapi/database"
+	"yendoapi/router"
+
 	"github.com/gofiber/fiber/v2"                    // Importing the fiber package for handling HTTP requests
 	"github.com/gofiber/fiber/v2/middleware/cors"    // Middleware for handling Cross-Origin Resource Sharing (CORS)
 	"github.com/gofiber/fiber/v2/middleware/favicon" // Middleware for serving favicon
@@ -16,12 +19,15 @@ func main() {
 	app.Use(cors.New())    // Use CORS middleware to allow cross-origin requests
 	app.Use(logger.New())  // Use logger middleware to log HTTP requests
 
+	database.ConnectDB()
+	router.SetupRoutes(app)
+
 	// Define a GET route for the path '/hello'
 	app.Get("/hello", hello)
 	// 404 Handler
 	app.Use(notFound)
 
-	log.Fatal(app.Listen(":5001")) // Start the server on port 5000 and log any errors
+	log.Fatal(app.Listen(":3000")) // Start the server on port 5000 and log any errors
 }
 
 // Handler
