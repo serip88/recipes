@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <form method="POST" action="http://127.0.0.1:3000/api/auth/login">
+        <label for="identity">Identity:</label>
+        <input type="text" id="identity" name="identity">
+        <br>
+        <label for="password">Password::</label>
+        <input type="password" id="password" name="password">
+        <br>
+        <input type="submit" value="Login">
+    </form>
+</body>
+<script>
+	// We could get the token from the "access_token" query
+	// param, available in the browsers "location" global
+	// const query = window.location.search.substring(1)
+	// const token = query.split('access_token=')[1]
+
+	// Call the user info API using the fetch browser library
+	fetch('http://127.0.0.1:3000/api/product/1', {
+			headers: {
+				// Include the token in the Authorization header
+				Authorization: 'token {{.tokenValue}}',
+				Allow: "http://127.0.0.1:3000/",
+				// Mode: 'no-cors', // attempt to save the day - 
+				//                  // currently all browsers refuse CORS; 
+				//                  // the server can control the behavior with a specific header 
+				//                  //'Access-Control-Allow-Origin': '*',
+			}
+		})
+		// Parse the response as JSON
+		.then(res => res.json())
+		.then(res => {
+			// Once we get the response (which has many fields)
+			// Documented here: https://developer.github.com/v3/users/#get-the-authenticated-user
+			// Write "Welcome <user name>" to the documents body
+			// Load also user's avatar image
+      console.log("res........",res)
+			const nameNode = document.createTextNode(`Welcome, ${res.data?.title}`)
+			document.body.appendChild(nameNode)
+			// document.getElementById("useravatar").setAttribute("src", res.description)
+		})
+</script>
+</html>
