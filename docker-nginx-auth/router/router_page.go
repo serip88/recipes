@@ -12,4 +12,11 @@ func SetupPageRoutes(app *fiber.App) {
 			"Title": "Hello, World!!",
 		}, "layouts/main2")
 	})
+
+	app.Get("/", func(c *fiber.Ctx) error {
+		// Render index within layouts/main
+		return c.Render("index", fiber.Map{
+			"Title": "Hello, World!!",
+		}, "layouts/index")
+	})
 }
