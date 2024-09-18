@@ -1,0 +1,14 @@
+<div>
+  {{ if .error }}
+        <p>Invalid credentials</p>
+    {{ end }}
+    <form method="POST" action="{{ actionURL }}">
+        <label for="identity">Identity:</label>
+        <input type="text" id="identity" name="identity">
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <br>
+        <input type="submit" value="Login">
+    </form>
+</div>

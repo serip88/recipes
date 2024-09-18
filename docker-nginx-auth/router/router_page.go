@@ -19,4 +19,13 @@ func SetupPageRoutes(app *fiber.App) {
 			"Title": "Hello, World!!",
 		}, "layouts/index")
 	})
+
+	app.Get("/login", func(c *fiber.Ctx) error {
+		data := fiber.Map{
+			"error":     "Invalid credentials",
+			"actionURL": "/api/auth/login", // Thay thế bằng URL và tham số mong muốn
+		}
+		return c.Render("embed/login", data)
+	})
+
 }
