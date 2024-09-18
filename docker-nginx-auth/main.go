@@ -10,10 +10,23 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"    // Middleware for handling Cross-Origin Resource Sharing (CORS)
 	"github.com/gofiber/fiber/v2/middleware/favicon" // Middleware for serving favicon
 	"github.com/gofiber/fiber/v2/middleware/logger"  // Middleware for logging HTTP requests
+	"github.com/gofiber/template/django/v3"
 )
 
 func main() {
-	app := fiber.New() // Initialize a new Fiber instance
+	// Create a new engine
+	engine := django.New("./views", ".html")
+
+	// Or from an embedded system
+	// See github.com/gofiber/embed for examples
+	// engine := html.NewFileSystem(http.Dir("./views", ".django"))
+
+	// Pass the engine to the Views
+	app := fiber.New(fiber.Config{
+		Views: engine,
+	})
+
+	// app := fiber.New() // Initialize a new Fiber instance
 	// register middlewares
 	app.Use(favicon.New()) // Use favicon middleware to serve favicon
 	app.Use(cors.New())    // Use CORS middleware to allow cross-origin requests
@@ -21,6 +34,7 @@ func main() {
 
 	database.ConnectDB()
 	router.SetupRoutes(app)
+	router.SetupPageRoutes(app)
 
 	// Define a GET route for the path '/hello'
 	app.Get("/hello", hello)
