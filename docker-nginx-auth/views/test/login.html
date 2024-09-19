@@ -24,7 +24,7 @@
 	fetch('http://127.0.0.1:3000/api/product/1', {
 			headers: {
 				// Include the token in the Authorization header
-				Authorization: 'token {{.tokenValue}}',
+				Authorization: 'token {{tokenValue}}',
 				Allow: "http://127.0.0.1:3000/",
 				// Mode: 'no-cors', // attempt to save the day - 
 				//                  // currently all browsers refuse CORS; 
