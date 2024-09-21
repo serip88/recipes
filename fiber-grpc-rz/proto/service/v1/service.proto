@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package proto;
+package servicev1;
 
-option go_package = "proto;service";
+option go_package = "protogen/service/v1;servicev1";
 
 message Request {
     int64 a = 1;
@@ -17,4 +17,4 @@ service AddService {
     rpc Add(Request) returns (Response);
     rpc Multiply(Request) returns (Response);
 }
-//protoc --go_out=. --proto_path=./proto ./proto/service.proto
+// usr/local/bin/protogen --enum  --out=. --go ./proto/service/v1/service.proto

@@ -1,6 +1,8 @@
-module github.com/gofiber/recipes/fiber-grpc
+module github.com/serip88/recipes/fiber-grpc-rz
 
 go 1.18
+
+replace github.com/serip88/recipes/fiber-grpc-rz/protogen => ../fiber-grpc-rz/protogen
 
 require (
 	github.com/gofiber/fiber/v2 v2.52.5

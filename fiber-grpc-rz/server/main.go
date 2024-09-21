@@ -4,12 +4,14 @@ import (
 	"context"
 	"net"
 
-	"github.com/gofiber/recipes/fiber-grpc/proto"
+	proto "github.com/serip88/recipes/fiber-grpc-rz/protogen/service/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
-type server struct{}
+type server struct {
+	proto.UnimplementedAddServiceServer
+}
 
 func main() {
 	lis, err := net.Listen("tcp", ":4040")
@@ -20,7 +22,7 @@ func main() {
 	proto.RegisterAddServiceServer(srv, &server{})
 	reflection.Register(srv)
 
-	if e := srv.Serve(lis); e != nil {
+	if err := srv.Serve(lis); err != nil {
 		panic(err)
 	}
 }
