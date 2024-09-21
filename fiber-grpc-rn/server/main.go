@@ -4,7 +4,7 @@ import (
 	"context"
 	"net"
 
-	proto "github.com/serip88/recipes/fiber-grpc-rz/protogen/service/v1"
+	proto "github.com/serip88/recipes/fiber-grpc-rn/protogen/service/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
