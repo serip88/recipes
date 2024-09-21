@@ -32,6 +32,7 @@ func main() {
 }
 
 func (s *server) Add(_ context.Context, request *proto.Request) (*proto.Response, error) {
+	println("B Add func...")
 	a, b := request.GetA(), request.GetB()
 
 	result := a + b
@@ -45,4 +46,17 @@ func (s *server) Multiply(_ context.Context, request *proto.Request) (*proto.Res
 	result := a * b
 
 	return &proto.Response{Result: result}, nil
+}
+func (s *server) GetUser(_ context.Context, request *proto.Request) (*proto.Response, error) {
+	println("B GetUser func...")
+	id := request.GetId()
+
+	user := &proto.User{
+		Id:       id,
+		Email:    "serip88@yahoo.com",
+		Password: "123456",
+		Name:     "Rain",
+	}
+
+	return &proto.Response{User: user}, nil
 }

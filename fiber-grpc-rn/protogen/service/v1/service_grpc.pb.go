@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type AddServiceClient interface {
 	Add(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
 	Multiply(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
-	Login(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
+	GetUser(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
 }
 
 type addServiceClient struct {
@@ -49,9 +49,9 @@ func (c *addServiceClient) Multiply(ctx context.Context, in *Request, opts ...gr
 	return out, nil
 }
 
-func (c *addServiceClient) Login(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+func (c *addServiceClient) GetUser(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/service.v1.AddService/Login", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.v1.AddService/GetUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (c *addServiceClient) Login(ctx context.Context, in *Request, opts ...grpc.
 type AddServiceServer interface {
 	Add(context.Context, *Request) (*Response, error)
 	Multiply(context.Context, *Request) (*Response, error)
-	Login(context.Context, *Request) (*Response, error)
+	GetUser(context.Context, *Request) (*Response, error)
 	mustEmbedUnimplementedAddServiceServer()
 }
 
@@ -78,8 +78,8 @@ func (UnimplementedAddServiceServer) Add(context.Context, *Request) (*Response, 
 func (UnimplementedAddServiceServer) Multiply(context.Context, *Request) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Multiply not implemented")
 }
-func (UnimplementedAddServiceServer) Login(context.Context, *Request) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+func (UnimplementedAddServiceServer) GetUser(context.Context, *Request) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
 func (UnimplementedAddServiceServer) mustEmbedUnimplementedAddServiceServer() {}
 
@@ -130,20 +130,20 @@ func _AddService_Multiply_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AddService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AddService_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AddServiceServer).Login(ctx, in)
+		return srv.(AddServiceServer).GetUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.v1.AddService/Login",
+		FullMethod: "/service.v1.AddService/GetUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AddServiceServer).Login(ctx, req.(*Request))
+		return srv.(AddServiceServer).GetUser(ctx, req.(*Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -164,8 +164,8 @@ var AddService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AddService_Multiply_Handler,
 		},
 		{
-			MethodName: "Login",
-			Handler:    _AddService_Login_Handler,
+			MethodName: "GetUser",
+			Handler:    _AddService_GetUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

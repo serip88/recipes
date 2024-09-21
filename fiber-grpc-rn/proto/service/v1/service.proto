@@ -11,11 +11,12 @@ message Request {
 
     int64 a = 2;
     int64 b = 3;
+    string id = 4;
 }
 
 message Response {
     int64 result = 1;
-    Login login = 2;
+    User user = 2;
 }
 
 enum RequestType {
@@ -26,7 +27,7 @@ enum RequestType {
 service AddService {
     rpc Add(Request) returns (Response);
     rpc Multiply(Request) returns (Response);
-    rpc Login(Request) returns (Response);
+    rpc GetUser(Request) returns (Response);
 }
 // /usr/local/bin/protogen --enum  --out=. --go ./proto/service/v1/service.proto
 // /usr/local/bin/protogen --enum  --out=. --go ./proto/service/v1/

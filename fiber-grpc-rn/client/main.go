@@ -43,10 +43,22 @@ func main() {
 			})
 		}
 		req := &proto.Request{A: int64(a), B: int64(b)}
-		if res, err := client.Add(context.Background(), req); err == nil {
-			return c.Status(fiber.StatusOK).JSON(fiber.Map{
-				"result": fmt.Sprint(res.Result),
-			})
+		//B test
+		req.Id = "1234566"
+		res := &proto.Response{
+			Result: 0,
+			User:   &proto.User{},
+		}
+		if res1, err := client.GetUser(context.Background(), req); err == nil {
+			res.User = res1.User
+		}
+		//E test
+		if res2, err := client.Add(context.Background(), req); err == nil {
+			res.Result = res2.Result
+			return c.JSON(fiber.Map{"status": fiber.StatusOK, "message": "data found", "data": res})
+			// return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			// 	"result": fmt.Sprint(res.Result),
+			// })
 		}
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),
