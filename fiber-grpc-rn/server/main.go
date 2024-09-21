@@ -4,6 +4,8 @@ import (
 	"context"
 	"net"
 
+	"github.com/serip88/recipes/fiber-grpc-rn/database"
+
 	proto "github.com/serip88/recipes/fiber-grpc-rn/protogen/service/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -25,6 +27,8 @@ func main() {
 	if err := srv.Serve(lis); err != nil {
 		panic(err)
 	}
+	//conect db
+	database.ConnectDB()
 }
 
 func (s *server) Add(_ context.Context, request *proto.Request) (*proto.Response, error) {
