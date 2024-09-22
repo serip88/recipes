@@ -90,5 +90,19 @@ func main() {
 		})
 
 	})
+	app.Get("/user/:a/:b", func(c *fiber.Ctx) error {
+		// a := c.Params("a")
+		// b := c.Params("b")
+
+		req := &proto.Request{A: int64(0), B: int64(0)}
+		req.Id = "1234566"
+		if res, err := client.GetUser(context.Background(), req); err == nil {
+			return c.JSON(fiber.Map{"status": fiber.StatusOK, "message": "data found", "data": res})
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+
+	})
 	log.Fatal(app.Listen(":3001"))
 }
