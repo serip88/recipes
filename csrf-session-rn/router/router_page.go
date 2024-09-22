@@ -56,11 +56,21 @@ func SetupPageRoutes(app *fiber.App) {
 
 	// Route for the login page
 	app.Get("/login", csrfMiddleware, func(c *fiber.Ctx) error {
+		//B Check if the user is logged in
+		session, err := store.Get(c)
+		if err != nil {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+		loggedIn, _ := session.Get("loggedIn").(bool)
+		if loggedIn {
+			// User is authenticated, redirect to the home page
+			return c.Redirect("/")
+		}
+		//E Check if the user is logged in
 		csrfToken, ok := c.Locals("csrf").(string)
 		if !ok {
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
-
 		return c.Render("login", fiber.Map{
 			"Title": "Login",
 			"csrf":  csrfToken,
@@ -132,17 +142,17 @@ func SetupPageRoutes(app *fiber.App) {
 
 	// Route for the protected content
 	app.Get("/protected", csrfMiddleware, func(c *fiber.Ctx) error {
-		// Check if the user is logged in
+		//B Check if the user is logged in
 		session, err := store.Get(c)
 		if err != nil {
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
 		loggedIn, _ := session.Get("loggedIn").(bool)
-
 		if !loggedIn {
 			// User is not authenticated, redirect to the login page
 			return c.Redirect("/login")
 		}
+		//E Check if the user is logged in
 
 		csrfToken, ok := c.Locals("csrf").(string)
 		if !ok {
