@@ -12,7 +12,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	proto "github.com/serip88/recipes/fiber-grpc-rn/protogen/service/v1"
+	proto "github.com/serip88/recipes/protogen/service/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
