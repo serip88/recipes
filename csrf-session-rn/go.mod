@@ -1,4 +1,4 @@
-module main
+module csrf-session-rn
 
 go 1.20
 
