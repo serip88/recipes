@@ -17,7 +17,8 @@ import (
 	"csrf-session-rn/router"
 
 	"github.com/gofiber/fiber/v2/middleware/logger" // Middleware for logging HTTP requests
-	"github.com/gofiber/template/html/v2"
+	// "github.com/gofiber/template/html/v2"
+	"github.com/gofiber/template/django/v3"
 )
 
 func main() {
@@ -43,7 +44,8 @@ func main() {
 	// protocol downgrade, cookie hijacking, SSL stripping, clickjacking, etc.
 
 	// HTML templates
-	engine := html.New("./views", ".html")
+	// engine := html.New("./views", ".html")
+	engine := django.New("./views", ".html")
 
 	// Create a Fiber app
 	app := fiber.New(fiber.Config{
