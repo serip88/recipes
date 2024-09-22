@@ -46,8 +46,15 @@ func SetupRoutes(app *fiber.App) {
 	store := util.InitSessionStore()
 	csrfMiddleware := util.MakeCsrf(store)
 
-	//Set GET/POST
-	SetupGetRoutes(app, csrfMiddleware, store)
-	SetupPostRoutes(app, csrfMiddleware, store, users, emptyHashString)
+	// Route for the root path
+	app.Get("/", func(c *fiber.Ctx) error {
+		// render the root page as HTML
+		return c.Render("index", fiber.Map{
+			"Title": "Index",
+		})
+	})
+	//Set module routes
+	AuthRoutes(app, csrfMiddleware, store, users, emptyHashString)
+	ProtectedRoutes(app, csrfMiddleware, store)
 
 }
