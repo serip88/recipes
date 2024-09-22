@@ -1,50 +1,11 @@
 package router
 
 import (
-	"csrf-session-rn/router/util"
-
 	"github.com/gofiber/fiber/v2"
-
-	"golang.org/x/crypto/bcrypt"
+	"github.com/gofiber/fiber/v2/middleware/session"
 )
 
-// User represents a user in the dummy authentication system
-type User struct {
-	Username string
-	Password string
-}
-
-// SetupRoutes setup router api
-func SetupPageRoutes(app *fiber.App) {
-	//B Hard code password
-	// Never hardcode passwords in production code
-	hashedPasswords := make(map[string]string)
-	for username, password := range map[string]string{
-		"user1": "password1",
-		"user2": "password2",
-	} {
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 10)
-		if err != nil {
-			panic(err)
-		}
-		hashedPasswords[username] = string(hashedPassword)
-	}
-
-	// Used to help prevent timing attacks
-	emptyHash, err := bcrypt.GenerateFromPassword([]byte(""), 10)
-	if err != nil {
-		panic(err)
-	}
-	emptyHashString := string(emptyHash)
-
-	users := make(map[string]User)
-	for username, hashedPassword := range hashedPasswords {
-		users[username] = User{Username: username, Password: hashedPassword}
-	}
-	//E Hard code password
-
-	store := util.InitSessionStore()
-	csrfMiddleware := util.MakeCsrf(store)
+func SetupGetRoutes(app *fiber.App, csrfMiddleware func(*fiber.Ctx) error, store *session.Store) {
 
 	// Route for the root path
 	app.Get("/", func(c *fiber.Ctx) error {
@@ -75,52 +36,6 @@ func SetupPageRoutes(app *fiber.App) {
 			"Title": "Login",
 			"csrf":  csrfToken,
 		})
-	})
-
-	// Route for processing the login
-	app.Post("/login", csrfMiddleware, func(c *fiber.Ctx) error {
-		// Retrieve the submitted form data
-		username := c.FormValue("username")
-		password := c.FormValue("password")
-
-		// Check if the credentials are valid
-		user, exists := users[username]
-		var checkPassword string
-		if exists {
-			checkPassword = user.Password
-		} else {
-			checkPassword = emptyHashString
-		}
-
-		if bcrypt.CompareHashAndPassword([]byte(checkPassword), []byte(password)) != nil {
-			// Authentication failed
-			csrfToken, ok := c.Locals("csrf").(string)
-			if !ok {
-				return c.SendStatus(fiber.StatusInternalServerError)
-			}
-
-			return c.Render("login", fiber.Map{
-				"Title": "Login",
-				"csrf":  csrfToken,
-				"error": "Invalid credentials",
-			})
-		}
-
-		// Set a session variable to mark the user as logged in
-		session, err := store.Get(c)
-		if err != nil {
-			return c.SendStatus(fiber.StatusInternalServerError)
-		}
-		if err := session.Reset(); err != nil {
-			return c.SendStatus(fiber.StatusInternalServerError)
-		}
-		session.Set("loggedIn", true)
-		if err := session.Save(); err != nil {
-			return c.SendStatus(fiber.StatusInternalServerError)
-		}
-
-		// Redirect to the protected route
-		return c.Redirect("/protected")
 	})
 
 	// Route for logging out
@@ -193,5 +108,4 @@ func SetupPageRoutes(app *fiber.App) {
 			"message": message,
 		})
 	})
-
 }

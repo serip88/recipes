@@ -51,7 +51,7 @@ func main() {
 		ViewsLayout: "layouts/main",
 	})
 	app.Use(logger.New()) // Use logger middleware to log HTTP requests
-	router.SetupPageRoutes(app)
+	router.SetupRoutes(app)
 
 	certFile := "cert.pem"
 	keyFile := "key.pem"
