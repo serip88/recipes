@@ -46,6 +46,16 @@ func main() {
 	// HTML templates
 	// engine := html.New("./views", ".html")
 	engine := django.New("./views", ".html")
+	// django Doc
+	// https://github.com/gofiber/template/blob/master/django/README.md
+	// https://docs.djangoproject.com/en/dev/topics/templates/
+
+	//B develop mode
+	// Reload the templates on each render, good for development
+	engine.Reload(true) // Optional. Default: false
+	// Debug will print each template that is parsed, good for debugging
+	engine.Debug(true) // Optional. Default: false
+	//E develop mode
 
 	// Create a Fiber app
 	app := fiber.New(fiber.Config{
