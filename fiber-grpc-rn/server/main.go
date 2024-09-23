@@ -2,10 +2,13 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net"
+	"strconv"
 
 	"github.com/serip88/recipes/fiber-grpc-rn/database"
 
+	"github.com/serip88/recipes/fiber-grpc-rn/server/handler"
 	proto "github.com/serip88/recipes/protogen/service/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -20,6 +23,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	//conect db
+	database.ConnectDB()
 	srv := grpc.NewServer()
 	proto.RegisterAddServiceServer(srv, &server{})
 	reflection.Register(srv)
@@ -27,8 +32,6 @@ func main() {
 	if err := srv.Serve(lis); err != nil {
 		panic(err)
 	}
-	//conect db
-	database.ConnectDB()
 }
 
 func (s *server) Add(_ context.Context, request *proto.Request) (*proto.Response, error) {
@@ -47,15 +50,18 @@ func (s *server) Multiply(_ context.Context, request *proto.Request) (*proto.Res
 
 	return &proto.Response{Result: result}, nil
 }
-func (s *server) GetUser(_ context.Context, request *proto.Request) (*proto.Response, error) {
+func (s *server) GetUser(ctx context.Context, request *proto.Request) (*proto.Response, error) {
 	println("B GetUser func...")
-	id := request.GetId()
+	email := request.GetId()
+	println("email...", email)
 
+	mUser, _ := handler.GetUserByEmail(email)
+	fmt.Println("mUser....", mUser)
 	user := &proto.User{
-		Id:       id,
-		Email:    "serip88@yahoo.com",
-		Password: "123456",
-		Name:     "Rain",
+		Id:       strconv.FormatInt(int64(mUser.ID), 10),
+		Email:    mUser.Email,
+		Password: mUser.Password,
+		Name:     mUser.Names,
 	}
 	println("E GetUser func...")
 	return &proto.Response{User: user}, nil
