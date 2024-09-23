@@ -15,30 +15,31 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
-	"csrf-session-rn/router"
+	router_pkg "csrf-session-rn/router"
 
 	"github.com/gofiber/fiber/v2/middleware/logger" // Middleware for logging HTTP requests
 	// "github.com/gofiber/template/html/v2"
 	"github.com/gofiber/template/django/v3"
-	proto "github.com/serip88/recipes/protogen/service/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	servicev1 "rain.io/protogen/service/v1"
 )
 
 func main() {
-	//B test client
+
 	conn, err := grpc.NewClient("localhost:4040", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	// conn, err := grpc.Dial("localhost:4040", grpc.WithInsecure())
 	if err != nil {
 		panic(err)
 	}
-	client := proto.NewAddServiceClient(conn)
-	println("start client...")
-	req := &proto.Request{A: int64(0), B: int64(0)}
-	req.Id = "1234566"
+	client := servicev1.NewAddServiceClient(conn)
+	//B test client
+	fmt.Println("Start client...")
+	req := &servicev1.Request{Id: "123456"}
 	if res, err := client.GetUser(context.Background(), req); err == nil {
-		println("res...", res, err)
+		fmt.Println("Res User...", res.User)
 	}
+	fmt.Println("End client...")
 	//E test client
 
 	// In production, run the app on port 443 with TLS enabled
@@ -82,6 +83,8 @@ func main() {
 		ViewsLayout: "layouts/main",
 	})
 	app.Use(logger.New()) // Use logger middleware to log HTTP requests
+
+	router := router_pkg.New(&client)
 	router.SetupRoutes(app)
 
 	certFile := "cert.pem"

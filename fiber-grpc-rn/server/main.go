@@ -57,6 +57,6 @@ func (s *server) GetUser(_ context.Context, request *proto.Request) (*proto.Resp
 		Password: "123456",
 		Name:     "Rain",
 	}
-
+	println("E GetUser func...")
 	return &proto.Response{User: user}, nil
 }

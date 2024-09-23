@@ -6,7 +6,18 @@ import (
 	"github.com/gofiber/fiber/v2"
 
 	"golang.org/x/crypto/bcrypt"
+	servicev1 "rain.io/protogen/service/v1"
 )
+
+type Router struct {
+	ServiceCli *servicev1.AddServiceClient
+}
+
+func New(client *servicev1.AddServiceClient) *Router {
+	return &Router{
+		ServiceCli: client,
+	}
+}
 
 // User represents a user in the dummy authentication system
 type User struct {
@@ -15,7 +26,7 @@ type User struct {
 }
 
 // SetupRoutes setup router api
-func SetupRoutes(app *fiber.App) {
+func (p *Router) SetupRoutes(app *fiber.App) {
 	//B Hard code password
 	// Never hardcode passwords in production code
 	hashedPasswords := make(map[string]string)

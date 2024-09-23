@@ -1,4 +1,4 @@
-module rn/proto
+module rain.io/proto
 
 go 1.22.4
 

@@ -1,15 +1,15 @@
 module csrf-session-rn
 
-go 1.20
+go 1.22.4
 
-replace github.com/serip88/recipes/protogen => ../protogen
+replace rain.io/protogen => ../protogen
 
 require (
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/gofiber/template/django/v3 v3.1.12
-	github.com/serip88/recipes/protogen v0.0.0-00010101000000-000000000000
 	golang.org/x/crypto v0.26.0
 	google.golang.org/grpc v1.67.0
+	rain.io/protogen v0.0.0-00010101000000-000000000000
 )
 
 require (
