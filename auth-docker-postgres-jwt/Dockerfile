@@ -1,16 +1,28 @@
-FROM golang:1.23.1@sha256:2fe82a3f3e006b4f2a316c6a21f62b66e1330ae211d039bb8d1128e12ed57bf1
+#GPT
+# Stage 1: Build the Go application
+FROM golang:1.20-alpine AS builder
 
-# Enviroment variable
-WORKDIR /usr/src/some-api
+# Set the working directory inside the container
+WORKDIR /app
 
-RUN go install github.com/air-verse/air@latest
+# Copy go.mod and go.sum to the container and download dependencies
+COPY go.mod go.sum ./
+RUN go mod download
 
-#Copying files to work directory
-COPY go.mod ./
-RUN go mod download && go mod verify
+# Copy the rest of the application source code to the container
 COPY . .
 
-# Run and expose the server on port 3000
-EXPOSE 3000
+# Build the Go application from the cmd directory
+RUN go build -o /go/bin/myapp ./cmd/main.go
 
-# CMD [ "nodemon", "build/app.js" ]
+# Stage 2: Create a smaller image for running the Go application
+FROM alpine:3.18
+
+# Copy the built Go binary from the builder stage
+COPY --from=builder /go/bin/myapp /usr/local/bin/myapp
+
+# Set the entrypoint to run the application
+ENTRYPOINT ["/usr/local/bin/myapp"]
+
+# Expose the port the application is running on (if necessary, e.g., port 8080)
+EXPOSE 8080
