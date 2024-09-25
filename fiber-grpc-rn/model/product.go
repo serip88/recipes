@@ -1,11 +1,15 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
 
 // Product struct
 type Product struct {
 	gorm.Model
-	Title       string `gorm:"not null" json:"title"`
-	Description string `gorm:"not null" json:"description"`
-	Amount      int    `gorm:"not null" json:"amount"`
+	ID          uuid.UUID `gorm:"primaryKey;type:varchar"`
+	Title       string    `gorm:"type:varchar;not null" json:"title"`
+	Description string    `gorm:"type:varchar;not null" json:"description"`
+	Amount      float64   `gorm:"not null" json:"amount"`
 }

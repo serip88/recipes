@@ -5,8 +5,8 @@ package service.v1;
 option go_package = "protogen/service/v1;servicev1";
 
 message User {
-  string id = 4;
-  string email = 1;
-  string password = 2;
-  string name = 3;
+  string id = 1;
+  string email = 2;
+  string password = 3;
+  string name = 4;
 }

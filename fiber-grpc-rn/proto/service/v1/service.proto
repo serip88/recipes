@@ -30,4 +30,4 @@ service AddService {
     rpc GetUser(Request) returns (Response);
 }
 // /usr/local/bin/protogen --enum  --out=. --go ./proto/service/v1/service.proto
-// /usr/local/bin/protogen --enum  --out=. --go ./proto/service/v1/
+// /usr/local/bin/protogen --enum  --out=../ --go ./proto/service/v1/

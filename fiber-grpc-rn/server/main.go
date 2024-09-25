@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net"
-	"strconv"
 
 	"github.com/serip88/recipes/fiber-grpc-rn/database"
 
@@ -58,7 +57,7 @@ func (s *server) GetUser(ctx context.Context, request *proto.Request) (*proto.Re
 	mUser, _ := handler.GetUserByEmail(email)
 	fmt.Println("mUser....", mUser)
 	user := &proto.User{
-		Id:       strconv.FormatInt(int64(mUser.ID), 10),
+		Id:       mUser.ID.String(),
 		Email:    mUser.Email,
 		Password: mUser.Password,
 		Name:     mUser.Names,
