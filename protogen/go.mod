@@ -1,4 +1,4 @@
-module rain.io/proto
+module github.com/serip88/recipes/protogen
 
 go 1.22.4
 
