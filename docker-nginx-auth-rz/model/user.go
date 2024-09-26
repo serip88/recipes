@@ -1,12 +1,16 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
 
 // User struct
 type User struct {
 	gorm.Model
-	Username string `gorm:"uniqueIndex;not null" json:"username"`
-	Email    string `gorm:"uniqueIndex;not null" json:"email"`
-	Password string `gorm:"not null" json:"password"`
-	Names    string `json:"names"`
+	ID       uuid.UUID `gorm:"primaryKey;type:uuid;default:gen_random_uuid()"`
+	Username string    `gorm:"uniqueIndex;type:varchar;not null" json:"username"`
+	Email    string    `gorm:"uniqueIndex;type:varchar;not null" json:"email"`
+	Password string    `gorm:"type:varchar;not null" json:"password"`
+	Names    string    `gorm:"type:varchar;not null" json:"names"`
 }
