@@ -7,3 +7,9 @@ func (x *RequestType) FromString(name string) bool {
 	*x = RequestType(v)
 	return ok
 }
+
+func (x *Module) FromString(name string) bool {
+	v, ok := Module_value[name]
+	*x = Module(v)
+	return ok
+}

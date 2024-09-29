@@ -8,10 +8,12 @@ option go_package = "protogen/service/v1;servicev1";
 
 message Request {
     RequestType type = 1;
+    Module module = 2;
 
-    int64 a = 2;
-    int64 b = 3;
-    string id = 4;
+    int64 a = 6;
+    int64 b = 7;
+    string id = 8;
+    User user = 9;
 }
 
 message Response {
@@ -22,6 +24,10 @@ message Response {
 enum RequestType {
     TYPE_NONE = 0;
     TYPE_LOGIN = 1;
+}
+enum Module {
+    MODULE_NONE = 0;
+    MODULE_LOGIN = 1;
 }
 
 service AddService {
