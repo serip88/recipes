@@ -36,7 +36,7 @@ func main() {
 	//B test client
 
 	/*user := &servicev1.User{
-		Email: "serip88@yahoo.com",
+		Email: "doremon@yahoo.com",
 	}
 	req := &servicev1.Request{
 		Module: servicev1.Module_MODULE_LOGIN,

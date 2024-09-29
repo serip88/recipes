@@ -66,23 +66,26 @@ func (p *Router) AuthRoutes(app *fiber.App, csrfMiddleware func(*fiber.Ctx) erro
 				Password: password,
 			},
 		}
+		user := &servicev1.User{}
 		if res, err := p.ServiceCli.GetUser(context.Background(), req); err == nil {
+			user = res.User
 			fmt.Println("Res User...", res.User)
 		} else {
 			fmt.Println("Login fails...", err.Error())
+			return err
 		}
 		fmt.Println("End Post login...")
 		//E get user from service
 		// Check if the credentials are valid
-		user, exists := users[username]
+		/*user, exists := users[username]
 		var checkPassword string
 		if exists {
 			checkPassword = user.Password
 		} else {
 			checkPassword = emptyHashString
-		}
+		}*/
 
-		if bcrypt.CompareHashAndPassword([]byte(checkPassword), []byte(password)) != nil {
+		if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)) != nil {
 			// Authentication failed
 			csrfToken, ok := c.Locals("csrf").(string)
 			if !ok {
@@ -95,7 +98,7 @@ func (p *Router) AuthRoutes(app *fiber.App, csrfMiddleware func(*fiber.Ctx) erro
 				"error": "Invalid credentials",
 			})
 		}
-
+		fmt.Println("Check password success...")
 		// Set a session variable to mark the user as logged in
 		session, err := store.Get(c)
 		if err != nil {
