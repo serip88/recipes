@@ -29,7 +29,7 @@ func (p *Router) ManageRoutes(app *fiber.App) {
 		return c.Render("manage", fiber.Map{
 			"Title": "Manage",
 			"csrf":  csrfToken,
-		})
+		}, "layouts/manage")
 	})
 
 	// Route for processing the manage form
