@@ -53,8 +53,12 @@ func (s *server) GetUser(ctx context.Context, request *proto.Request) (*proto.Re
 	println("B GetUser func...")
 	email := request.GetId()
 	println("email...", email)
-
-	mUser, _ := handler.GetUserByEmail(email)
+	mUser, err := handler.GetUserByEmail(email)
+	if err != nil {
+		return nil, err
+	} else if mUser == nil {
+		return nil, nil
+	}
 	fmt.Println("mUser....", mUser)
 	user := &proto.User{
 		Id:       mUser.ID.String(),

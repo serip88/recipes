@@ -24,7 +24,8 @@ func GetUserByEmail(e string) (*model.User, error) {
 	db := database.DB
 	fmt.Println("db...", db)
 	var user model.User
-	if err := db.Where(&model.User{Email: e}).First(&user).Error; err != nil {
+	// if err := db.Where(&model.User{Email: e}).First(&user).Error; err != nil {
+	if err := db.Where("email = ?", e).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}

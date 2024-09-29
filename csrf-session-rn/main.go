@@ -35,11 +35,16 @@ func main() {
 	client := servicev1.NewAddServiceClient(conn)
 	//B test client
 	fmt.Println("Start client...")
-	req := &servicev1.Request{Id: "serip88@yahoo.com"}
+	user := &servicev1.User{
+		Email: "serip88@yahoo.com",
+	}
+	req := &servicev1.Request{
+		Module: servicev1.Module_MODULE_LOGIN,
+		User:   user}
 	if res, err := client.GetUser(context.Background(), req); err == nil {
 		fmt.Println("Res User...", res.User)
 	} else {
-		fmt.Println("Login fails...")
+		fmt.Println("Login fails...", err.Error())
 	}
 	fmt.Println("End client...")
 	//E test client
