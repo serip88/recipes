@@ -5,13 +5,13 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/session"
 	"golang.org/x/crypto/bcrypt"
 	servicev1 "rain.io/protogen/service/v1"
 )
 
-func (p *Router) AuthRoutes(app *fiber.App, csrfMiddleware func(*fiber.Ctx) error, store *session.Store, users map[string]User, emptyHashString string) {
+func (p *Router) AuthRoutes(app *fiber.App, csrfMiddleware func(*fiber.Ctx) error) {
 
+	store := p.Store
 	// Route for the login page
 	app.Get("/login", csrfMiddleware, func(c *fiber.Ctx) error {
 		//B Check if the user is logged in
@@ -76,8 +76,10 @@ func (p *Router) AuthRoutes(app *fiber.App, csrfMiddleware func(*fiber.Ctx) erro
 		}
 		fmt.Println("End Post login...")
 		//E get user from service
+		//B get hard users
+		/*users, emptyHashString := HardGetUsers()
 		// Check if the credentials are valid
-		/*user, exists := users[username]
+		user, exists := users[username]
 		var checkPassword string
 		if exists {
 			checkPassword = user.Password
@@ -92,6 +94,7 @@ func (p *Router) AuthRoutes(app *fiber.App, csrfMiddleware func(*fiber.Ctx) erro
 				return c.SendStatus(fiber.StatusInternalServerError)
 			}
 
+			fmt.Println("Check password fails...")
 			return c.Render("login", fiber.Map{
 				"Title": "Login",
 				"csrf":  csrfToken,
@@ -116,4 +119,35 @@ func (p *Router) AuthRoutes(app *fiber.App, csrfMiddleware func(*fiber.Ctx) erro
 		return c.Redirect("/protected")
 	})
 
+}
+
+func HardGetUsers() (map[string]User, string) {
+	//B Hard code password
+	// Never hardcode passwords in production code
+	hashedPasswords := make(map[string]string)
+	for username, password := range map[string]string{
+		"user1": "password1",
+		"user2": "password2",
+	} {
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 10)
+		if err != nil {
+			panic(err)
+		}
+		hashedPasswords[username] = string(hashedPassword)
+	}
+
+	// Used to help prevent timing attacks
+	emptyHash, err := bcrypt.GenerateFromPassword([]byte(""), 10)
+	if err != nil {
+		panic(err)
+	}
+	emptyHashString := string(emptyHash)
+
+	users := make(map[string]User)
+	for username, hashedPassword := range hashedPasswords {
+		users[username] = User{Username: username, Password: hashedPassword}
+	}
+	//E Hard code password
+
+	return users, emptyHashString
 }

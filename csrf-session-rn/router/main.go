@@ -4,18 +4,21 @@ import (
 	"csrf-session-rn/router/util"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/session"
 
-	"golang.org/x/crypto/bcrypt"
 	servicev1 "rain.io/protogen/service/v1"
 )
 
 type Router struct {
 	ServiceCli servicev1.AddServiceClient
+	Store      *session.Store
 }
 
 func New(client servicev1.AddServiceClient) *Router {
+	store := util.InitSessionStore()
 	return &Router{
 		ServiceCli: client,
+		Store:      store,
 	}
 }
 
@@ -27,35 +30,8 @@ type User struct {
 
 // SetupRoutes setup router api
 func (p *Router) SetupRoutes(app *fiber.App) {
-	//B Hard code password
-	// Never hardcode passwords in production code
-	hashedPasswords := make(map[string]string)
-	for username, password := range map[string]string{
-		"user1": "password1",
-		"user2": "password2",
-	} {
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 10)
-		if err != nil {
-			panic(err)
-		}
-		hashedPasswords[username] = string(hashedPassword)
-	}
 
-	// Used to help prevent timing attacks
-	emptyHash, err := bcrypt.GenerateFromPassword([]byte(""), 10)
-	if err != nil {
-		panic(err)
-	}
-	emptyHashString := string(emptyHash)
-
-	users := make(map[string]User)
-	for username, hashedPassword := range hashedPasswords {
-		users[username] = User{Username: username, Password: hashedPassword}
-	}
-	//E Hard code password
-
-	store := util.InitSessionStore()
-	csrfMiddleware := util.MakeCsrf(store)
+	csrfMiddleware := util.MakeCsrf(p.Store)
 
 	// Route for the root path
 	app.Get("/", func(c *fiber.Ctx) error {
@@ -65,7 +41,7 @@ func (p *Router) SetupRoutes(app *fiber.App) {
 		})
 	})
 	//Set module routes
-	p.AuthRoutes(app, csrfMiddleware, store, users, emptyHashString)
-	p.ProtectedRoutes(app, csrfMiddleware, store)
+	p.AuthRoutes(app, csrfMiddleware)
+	p.ProtectedRoutes(app, csrfMiddleware)
 
 }
