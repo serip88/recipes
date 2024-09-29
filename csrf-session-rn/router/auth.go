@@ -9,9 +9,10 @@ import (
 	servicev1 "rain.io/protogen/service/v1"
 )
 
-func (p *Router) AuthRoutes(app *fiber.App, csrfMiddleware func(*fiber.Ctx) error) {
+func (p *Router) AuthRoutes(app *fiber.App) {
 
 	store := p.Store
+	csrfMiddleware := p.CsrfMiddleware
 	// Route for the login page
 	app.Get("/login", csrfMiddleware, func(c *fiber.Ctx) error {
 		//B Check if the user is logged in

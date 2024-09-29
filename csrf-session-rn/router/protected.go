@@ -4,8 +4,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func (p *Router) ProtectedRoutes(app *fiber.App, csrfMiddleware func(*fiber.Ctx) error) {
+func (p *Router) ProtectedRoutes(app *fiber.App) {
 	store := p.Store
+	csrfMiddleware := p.CsrfMiddleware
 	// Route for the protected content
 	app.Get("/protected", csrfMiddleware, func(c *fiber.Ctx) error {
 		//B Check if the user is logged in

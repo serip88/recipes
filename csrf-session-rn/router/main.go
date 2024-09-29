@@ -10,15 +10,18 @@ import (
 )
 
 type Router struct {
-	ServiceCli servicev1.AddServiceClient
-	Store      *session.Store
+	ServiceCli     servicev1.AddServiceClient
+	Store          *session.Store
+	CsrfMiddleware func(*fiber.Ctx) error
 }
 
 func New(client servicev1.AddServiceClient) *Router {
 	store := util.InitSessionStore()
+	csrfMiddleware := util.MakeCsrf(store)
 	return &Router{
-		ServiceCli: client,
-		Store:      store,
+		ServiceCli:     client,
+		Store:          store,
+		CsrfMiddleware: csrfMiddleware,
 	}
 }
 
@@ -31,8 +34,6 @@ type User struct {
 // SetupRoutes setup router api
 func (p *Router) SetupRoutes(app *fiber.App) {
 
-	csrfMiddleware := util.MakeCsrf(p.Store)
-
 	// Route for the root path
 	app.Get("/", func(c *fiber.Ctx) error {
 		// render the root page as HTML
@@ -41,7 +42,7 @@ func (p *Router) SetupRoutes(app *fiber.App) {
 		})
 	})
 	//Set module routes
-	p.AuthRoutes(app, csrfMiddleware)
-	p.ProtectedRoutes(app, csrfMiddleware)
+	p.AuthRoutes(app)
+	p.ProtectedRoutes(app)
 
 }
