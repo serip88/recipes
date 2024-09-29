@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/tls"
@@ -33,9 +32,10 @@ func main() {
 		panic(err)
 	}
 	client := servicev1.NewAddServiceClient(conn)
-	//B test client
 	fmt.Println("Start client...")
-	user := &servicev1.User{
+	//B test client
+
+	/*user := &servicev1.User{
 		Email: "serip88@yahoo.com",
 	}
 	req := &servicev1.Request{
@@ -45,9 +45,9 @@ func main() {
 		fmt.Println("Res User...", res.User)
 	} else {
 		fmt.Println("Login fails...", err.Error())
-	}
-	fmt.Println("End client...")
+	}*/
 	//E test client
+	fmt.Println("End client...")
 
 	// In production, run the app on port 443 with TLS enabled
 	// or run the app behind a reverse proxy that handles TLS.
@@ -91,7 +91,7 @@ func main() {
 	})
 	app.Use(logger.New()) // Use logger middleware to log HTTP requests
 
-	router := router_pkg.New(&client)
+	router := router_pkg.New(client)
 	router.SetupRoutes(app)
 
 	certFile := "cert.pem"

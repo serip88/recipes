@@ -5,7 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/session"
 )
 
-func ProtectedRoutes(app *fiber.App, csrfMiddleware func(*fiber.Ctx) error, store *session.Store) {
+func (p *Router) ProtectedRoutes(app *fiber.App, csrfMiddleware func(*fiber.Ctx) error, store *session.Store) {
 
 	// Route for the protected content
 	app.Get("/protected", csrfMiddleware, func(c *fiber.Ctx) error {

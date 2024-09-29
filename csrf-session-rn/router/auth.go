@@ -1,12 +1,16 @@
 package router
 
 import (
+	"context"
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
 	"golang.org/x/crypto/bcrypt"
+	servicev1 "rain.io/protogen/service/v1"
 )
 
-func AuthRoutes(app *fiber.App, csrfMiddleware func(*fiber.Ctx) error, store *session.Store, users map[string]User, emptyHashString string) {
+func (p *Router) AuthRoutes(app *fiber.App, csrfMiddleware func(*fiber.Ctx) error, store *session.Store, users map[string]User, emptyHashString string) {
 
 	// Route for the login page
 	app.Get("/login", csrfMiddleware, func(c *fiber.Ctx) error {
@@ -52,7 +56,23 @@ func AuthRoutes(app *fiber.App, csrfMiddleware func(*fiber.Ctx) error, store *se
 		// Retrieve the submitted form data
 		username := c.FormValue("username")
 		password := c.FormValue("password")
-
+		//B get user from service
+		fmt.Println("username.password...", username, password)
+		fmt.Println("Start Post login...")
+		req := &servicev1.Request{
+			Module: servicev1.Module_MODULE_LOGIN,
+			User: &servicev1.User{
+				Email:    username,
+				Password: password,
+			},
+		}
+		if res, err := p.ServiceCli.GetUser(context.Background(), req); err == nil {
+			fmt.Println("Res User...", res.User)
+		} else {
+			fmt.Println("Login fails...", err.Error())
+		}
+		fmt.Println("End Post login...")
+		//E get user from service
 		// Check if the credentials are valid
 		user, exists := users[username]
 		var checkPassword string

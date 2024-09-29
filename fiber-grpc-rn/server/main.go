@@ -51,7 +51,7 @@ func (s *server) Multiply(_ context.Context, request *proto.Request) (*proto.Res
 }
 func (s *server) GetUser(ctx context.Context, request *proto.Request) (*proto.Response, error) {
 	println("B GetUser func...")
-	email := request.GetId()
+	email := request.GetUser().GetEmail()
 	println("email...", email)
 	mUser, err := handler.GetUserByEmail(email)
 	if err != nil {

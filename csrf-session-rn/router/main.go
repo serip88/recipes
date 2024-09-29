@@ -10,10 +10,10 @@ import (
 )
 
 type Router struct {
-	ServiceCli *servicev1.AddServiceClient
+	ServiceCli servicev1.AddServiceClient
 }
 
-func New(client *servicev1.AddServiceClient) *Router {
+func New(client servicev1.AddServiceClient) *Router {
 	return &Router{
 		ServiceCli: client,
 	}
@@ -65,7 +65,7 @@ func (p *Router) SetupRoutes(app *fiber.App) {
 		})
 	})
 	//Set module routes
-	AuthRoutes(app, csrfMiddleware, store, users, emptyHashString)
-	ProtectedRoutes(app, csrfMiddleware, store)
+	p.AuthRoutes(app, csrfMiddleware, store, users, emptyHashString)
+	p.ProtectedRoutes(app, csrfMiddleware, store)
 
 }
