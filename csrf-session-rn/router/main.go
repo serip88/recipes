@@ -44,5 +44,6 @@ func (p *Router) SetupRoutes(app *fiber.App) {
 	//Set module routes
 	p.AuthRoutes(app)
 	p.ProtectedRoutes(app)
+	p.ManageRoutes(app)
 
 }
