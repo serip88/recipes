@@ -34,6 +34,7 @@ type User struct {
 // SetupRoutes setup router api
 func (p *Router) SetupRoutes(app *fiber.App) {
 
+	app.Static("/static", "./static")
 	// Route for the root path
 	app.Get("/", func(c *fiber.Ctx) error {
 		// render the root page as HTML

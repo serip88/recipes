@@ -25,11 +25,12 @@ func (p *Router) ManageRoutes(app *fiber.App) {
 		if !ok {
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
-
-		return c.Render("manage", fiber.Map{
-			"Title": "Manage",
-			"csrf":  csrfToken,
-		}, "layouts/manage")
+		fMap := fiber.Map{
+			"Title":     "Manage",
+			"csrf":      csrfToken,
+			"StaticURL": "/static/",
+		}
+		return c.Render("manage", fMap, "layouts/main_sidebar")
 	})
 
 	// Route for processing the manage form
