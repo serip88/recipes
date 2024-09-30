@@ -58,13 +58,13 @@
 
                <!-- Login form inputs and elements -->
                <div class="py-[30px] px-[40px]">
-                  <form id="admin-form">
+                  <form id="admin-form" method="POST" action="/login">
 
                      <!-- Email Address input -->
                      <div class="mb-6">
                         <label for="email-username" class="text-[14px] w-full leading-[1.4285714286] font-medium text-dark dark:text-gray-300 mb-[8px] capitalize inline-block">Email
                            Address</label>
-                        <input type="text" id="email-username" class="flex items-center shadow-none py-[10px] px-[20px] h-[48px] border-1 border-regular rounded-4 w-full text-[14px] font-normal leading-[1.5] placeholder:text-[#A0A0A0] focus:ring-primary focus:border-primary" placeholder="username or name@example.com" autocomplete="off" value="name@example.com" required>
+                        <input type="text" id="email-username" class="flex items-center shadow-none py-[10px] px-[20px] h-[48px] border-1 border-regular rounded-4 w-full text-[14px] font-normal leading-[1.5] placeholder:text-[#A0A0A0] focus:ring-primary focus:border-primary" placeholder="username or name@example.com" autocomplete="off" value="name@example.com" name="username" required>
                      </div>
 
                      <!-- Password input -->
@@ -76,7 +76,8 @@
                               <input class="hidden js-password-toggle" id="toggle" type="checkbox">
                               <label class=" rounded cursor-pointer text-light text-[15px] js-password-label dark:text-subtitle-dark" for="toggle"><i class="uil uil-eye-slash"></i></label>
                            </div>
-                           <input class="flex items-center shadow-none py-[10px] px-[20px] h-[48px] border-1 border-regular rounded-4 w-full text-[14px] font-normal leading-[1.5] placeholder:text-[#A0A0A0] focus:ring-primary focus:border-primary js-password" id="password" type="password" value="123456" autocomplete="off" placeholder="Password">
+                           <input class="flex items-center shadow-none py-[10px] px-[20px] h-[48px] border-1 border-regular rounded-4 w-full text-[14px] font-normal leading-[1.5] placeholder:text-[#A0A0A0] focus:ring-primary focus:border-primary js-password" id="password" type="password" value="123456" autocomplete="off" placeholder="Password" name="password" required>
+                           <input type="hidden" id="csrf" name="csrf" value="{{ csrf }}">
                         </div>
                      </div>
 
@@ -172,7 +173,7 @@
    <script src="{{StaticURL}}assets/theme_assets/js/apex-custom.js"></script>
    <script src="{{StaticURL}}assets/theme_assets/js/full-calendar.js"></script>
    <script src="{{StaticURL}}assets/theme_assets/js/googlemap-init.js"></script>
-   <script src="{{StaticURL}}assets/theme_assets/js/main.js"></script>
+   <!-- <script src="{{StaticURL}}assets/theme_assets/js/main.js"></script> -->
    <script src="{{StaticURL}}assets/theme_assets/js/svgMapData.js"></script>
    <!-- endinject-->
 </body>
