@@ -1,21 +1,45 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Manage Page</title>
-  </head>
-  <body>
-    <header>
-      <h1>Header Section 1</h1>
-    <nav>
-        <!-- Your navigation links here -->
-    </nav>
-    </header>
-    <main>
-      <div class="left">left Page</div>
-      <div class="right">right Page</div>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tailwind CSS Layout</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Header -->
+  <header class="bg-blue-500 text-white p-4">
+    <h1 class="text-center text-2xl font-bold">Header</h1>
+  </header>
+
+  <!-- Content -->
+  <div class="container mx-auto mt-6 grid grid-cols-4 gap-4">
+    
+    <!-- Left Panel -->
+    <aside class="col-span-1 bg-gray-200 p-4">
+      <h2 class="font-semibold text-xl">Left Panel</h2>
+      <p>Some content here.</p>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="col-span-2 bg-white p-6 shadow-md">
+      <h2 class="text-2xl font-bold mb-4">Main Content</h2>
+      <p>This is the main content area.</p>
     </main>
-    <footer>
-      <p>Footer content © 2024</p>
-    </footer>
-  </body>
+
+    <!-- Right Panel -->
+    <aside class="col-span-1 bg-gray-200 p-4">
+      <h2 class="font-semibold text-xl">Right Panel</h2>
+      <p>Additional content here.</p>
+    </aside>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-blue-500 text-white p-4 mt-6">
+    <p class="text-center">Footer &copy; 2024</p>
+  </footer>
+
+</body>
 </html>
