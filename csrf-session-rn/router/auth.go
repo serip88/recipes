@@ -30,10 +30,11 @@ func (p *Router) AuthRoutes(app *fiber.App) {
 		if !ok {
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
-		return c.Render("login", fiber.Map{
-			"Title": "Login",
-			"csrf":  csrfToken,
-		})
+		return c.Render("embed", fiber.Map{
+			"Title":     "Login",
+			"csrf":      csrfToken,
+			"StaticURL": "/static/",
+		}, "layouts/login/index")
 	})
 
 	// Route for logging out
