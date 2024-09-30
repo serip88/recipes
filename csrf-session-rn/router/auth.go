@@ -117,7 +117,7 @@ func (p *Router) AuthRoutes(app *fiber.App) {
 		}
 
 		// Redirect to the protected route
-		return c.Redirect("/protected")
+		return c.Redirect("/manage")
 	})
 
 }

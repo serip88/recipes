@@ -30,7 +30,7 @@ func (p *Router) ManageRoutes(app *fiber.App) {
 			"csrf":      csrfToken,
 			"StaticURL": "/static/",
 		}
-		return c.Render("manage", fMap, "layouts/main_sidebar")
+		return c.Render("pages/dashboard", fMap, "layouts/manage/index")
 	})
 
 	// Route for processing the manage form
