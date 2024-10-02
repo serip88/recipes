@@ -34,7 +34,7 @@ type Page struct {
 	Title  string
 	Page   string
 	Layout string
-	Err    string
+	Error  string
 }
 
 // SetupRoutes setup router api
@@ -64,7 +64,7 @@ func (p *Router) HandlePage(c *fiber.Ctx, page Page, fMap fiber.Map) error {
 	fMap["csrf"] = csrfToken
 	fMap["StaticURL"] = "/static/"
 	fMap["Title"] = page.Title
-	fMap["err"] = page.Err
+	fMap["error"] = page.Error
 
 	if page.Layout == "" {
 		return c.Render(page.Page, fMap)
