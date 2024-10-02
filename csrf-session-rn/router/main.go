@@ -31,6 +31,11 @@ type User struct {
 	Username string
 	Password string
 }
+type Page struct {
+	Title  string
+	Page   string
+	Layout string
+}
 
 // SetupRoutes setup router api
 func (p *Router) SetupRoutes(app *fiber.App) {
@@ -70,16 +75,17 @@ func (p *Router) HandleErrorPage(c *fiber.Ctx, page string, err string, layout s
 		return c.Render(page, fMap, layout) //"layouts/login/index"
 	}
 }
-func (p *Router) HandlePage(c *fiber.Ctx, page string, layout string, fMap fiber.Map) error {
+func (p *Router) HandlePage(c *fiber.Ctx, page Page, fMap fiber.Map) error {
 
 	csrfToken, ok := c.Locals("csrf").(string)
 	if !ok {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 	fMap["csrf"] = csrfToken
-	if layout == "" {
-		return c.Render(page, fMap)
+	fMap["Title"] = page.Title
+	if page.Layout == "" {
+		return c.Render(page.Page, fMap)
 	} else {
-		return c.Render(page, fMap, layout) //"layouts/login/index"
+		return c.Render(page.Page, fMap, page.Layout) //"layouts/login/index"
 	}
 }

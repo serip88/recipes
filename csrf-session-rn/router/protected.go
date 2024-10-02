@@ -20,10 +20,13 @@ func (p *Router) ProtectedRoutes(app *fiber.App) {
 			return c.Redirect("/login")
 		}
 		//E Check if the user is logged in
-		fMap := fiber.Map{
-			"Title": "Protected",
+		page := Page{
+			Title:  "Protected",
+			Page:   "protected",
+			Layout: "",
 		}
-		return p.HandlePage(c, "protected", "", fMap)
+		fMap := fiber.Map{}
+		return p.HandlePage(c, page, fMap)
 	})
 
 	// Route for processing the protected form
@@ -42,10 +45,15 @@ func (p *Router) ProtectedRoutes(app *fiber.App) {
 
 		// Retrieve the submitted form data
 		message := c.FormValue("message")
+		page := Page{
+			Title:  "Protected",
+			Page:   "protected",
+			Layout: "",
+		}
 		fMap := fiber.Map{
 			"Title":   "Protected",
 			"message": message,
 		}
-		return p.HandlePage(c, "protected", "", fMap)
+		return p.HandlePage(c, page, fMap)
 	})
 }
