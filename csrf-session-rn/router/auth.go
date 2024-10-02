@@ -81,7 +81,7 @@ func (p *Router) AuthRoutes(app *fiber.App) {
 			user = res.User
 			fmt.Println("Res User...", res.User)
 			if user == nil {
-				loginPage.Error = "Err: User Not Found."
+				loginPage.Error = "User Not Found."
 				return p.HandlePage(c, loginPage, fMap)
 			}
 		} else {
@@ -103,7 +103,7 @@ func (p *Router) AuthRoutes(app *fiber.App) {
 
 		if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)) != nil {
 			// Authentication failed
-			loginPage.Error = "Err: Wrong Password."
+			loginPage.Error = "Wrong Password."
 			return p.HandlePage(c, loginPage, fMap)
 
 		}
