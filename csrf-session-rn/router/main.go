@@ -2,6 +2,7 @@ package router
 
 import (
 	"csrf-session-rn/router/util"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
@@ -47,4 +48,20 @@ func (p *Router) SetupRoutes(app *fiber.App) {
 	p.ProtectedRoutes(app)
 	p.ManageRoutes(app)
 
+}
+
+func (p *Router) HandleError(c *fiber.Ctx) error {
+	// Authentication failed
+	csrfToken, ok := c.Locals("csrf").(string)
+	if !ok {
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+
+	fmt.Println("Check password fails...")
+	return c.Render("embed", fiber.Map{
+		"Title":     "Login",
+		"csrf":      csrfToken,
+		"StaticURL": "/static/",
+		"error":     "Invalid credentials",
+	}, "layouts/login/index")
 }

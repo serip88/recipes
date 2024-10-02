@@ -72,6 +72,9 @@ func (p *Router) AuthRoutes(app *fiber.App) {
 		if res, err := p.ServiceCli.GetUser(context.Background(), req); err == nil {
 			user = res.User
 			fmt.Println("Res User...", res.User)
+			if user == nil {
+				return p.HandleError(c)
+			}
 		} else {
 			fmt.Println("Login fails...", err.Error())
 			return err
@@ -91,17 +94,8 @@ func (p *Router) AuthRoutes(app *fiber.App) {
 
 		if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)) != nil {
 			// Authentication failed
-			csrfToken, ok := c.Locals("csrf").(string)
-			if !ok {
-				return c.SendStatus(fiber.StatusInternalServerError)
-			}
+			return p.HandleError(c)
 
-			fmt.Println("Check password fails...")
-			return c.Render("login", fiber.Map{
-				"Title": "Login",
-				"csrf":  csrfToken,
-				"error": "Invalid credentials",
-			})
 		}
 		fmt.Println("Check password success...")
 		// Set a session variable to mark the user as logged in

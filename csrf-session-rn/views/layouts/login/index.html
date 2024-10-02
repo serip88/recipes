@@ -80,7 +80,23 @@
                            <input type="hidden" id="csrf" name="csrf" value="{{ csrf }}">
                         </div>
                      </div>
+                     <!-- B error message -->
+                     {% if error %}
+                     <div class="px-[20px] py-[10px] text-[14px] rounded-lg bg-danger/10 text-danger border-1 border-danger/10 capitalize" role="alert">
+                        <div class="flex items-baseline flex-wrap gap-[8px]">
 
+                           <span>
+                              <i class="text-current uil uil-layer-group text-[18px]"></i>
+                           </span>
+
+                           <div>
+                              <p class="font-normal text-[14px]">Error: {{ error }}</p>
+
+                           </div>
+                        </div>
+                     </div>
+                     {% endif %}
+                     <!-- E error message -->
                      <!-- Remember me and forgot password options -->
                      <div class="flex items-center sm:justify-between justify-center max-sm:flex-wrap capitalize mb-[19px] mt-[23px] gap-[15px]">
                         <div class="flex">
