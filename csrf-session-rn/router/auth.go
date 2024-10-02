@@ -73,7 +73,7 @@ func (p *Router) AuthRoutes(app *fiber.App) {
 			user = res.User
 			fmt.Println("Res User...", res.User)
 			if user == nil {
-				return p.HandleError(c)
+				return p.HandleErrorPage(c, "embed", "Invalid credentials", "layouts/login/index")
 			}
 		} else {
 			fmt.Println("Login fails...", err.Error())
@@ -94,7 +94,7 @@ func (p *Router) AuthRoutes(app *fiber.App) {
 
 		if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)) != nil {
 			// Authentication failed
-			return p.HandleError(c)
+			return p.HandleErrorPage(c, "embed", "Invalid credentials", "layouts/login/index")
 
 		}
 		fmt.Println("Check password success...")

@@ -50,7 +50,7 @@ func (p *Router) SetupRoutes(app *fiber.App) {
 
 }
 
-func (p *Router) HandleError(c *fiber.Ctx) error {
+func (p *Router) HandleErrorPage(c *fiber.Ctx, page string, msg string, layout string) error {
 	// Authentication failed
 	csrfToken, ok := c.Locals("csrf").(string)
 	if !ok {
@@ -58,10 +58,15 @@ func (p *Router) HandleError(c *fiber.Ctx) error {
 	}
 
 	fmt.Println("Check password fails...")
-	return c.Render("embed", fiber.Map{
+	fMap := fiber.Map{
 		"Title":     "Login",
 		"csrf":      csrfToken,
 		"StaticURL": "/static/",
-		"error":     "Invalid credentials",
-	}, "layouts/login/index")
+		"error":     msg, //"Invalid credentials"
+	}
+	if layout == "" {
+		return c.Render(page, fMap)
+	} else {
+		return c.Render(page, fMap, layout) //"layouts/login/index"
+	}
 }
