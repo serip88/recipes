@@ -68,12 +68,21 @@ func (p *Router) AuthRoutes(app *fiber.App) {
 				Password: password,
 			},
 		}
+
+		loginPage := Page{
+			Title:  "Login",
+			Page:   "embed",
+			Layout: "layouts/login/index",
+			Err:    "Invalid credentials",
+		}
+		fMap := fiber.Map{}
 		user := &servicev1.User{}
 		if res, err := p.ServiceCli.GetUser(context.Background(), req); err == nil {
 			user = res.User
 			fmt.Println("Res User...", res.User)
 			if user == nil {
-				return p.HandleErrorPage(c, "embed", "Invalid credentials", "layouts/login/index")
+				loginPage.Err = "Err: User Not Found."
+				return p.HandlePage(c, loginPage, fMap)
 			}
 		} else {
 			fmt.Println("Login fails...", err.Error())
@@ -94,7 +103,8 @@ func (p *Router) AuthRoutes(app *fiber.App) {
 
 		if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)) != nil {
 			// Authentication failed
-			return p.HandleErrorPage(c, "embed", "Invalid credentials", "layouts/login/index")
+			loginPage.Err = "Err: Wrong Password."
+			return p.HandlePage(c, loginPage, fMap)
 
 		}
 		fmt.Println("Check password success...")

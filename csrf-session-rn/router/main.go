@@ -2,7 +2,6 @@ package router
 
 import (
 	"csrf-session-rn/router/util"
-	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
@@ -35,6 +34,7 @@ type Page struct {
 	Title  string
 	Page   string
 	Layout string
+	Err    string
 }
 
 // SetupRoutes setup router api
@@ -55,26 +55,6 @@ func (p *Router) SetupRoutes(app *fiber.App) {
 
 }
 
-func (p *Router) HandleErrorPage(c *fiber.Ctx, page string, err string, layout string) error {
-	// Authentication failed
-	csrfToken, ok := c.Locals("csrf").(string)
-	if !ok {
-		return c.SendStatus(fiber.StatusInternalServerError)
-	}
-
-	fmt.Println("Check password fails...")
-	fMap := fiber.Map{
-		"Title":     "Login",
-		"csrf":      csrfToken,
-		"StaticURL": "/static/",
-		"error":     err, //"Invalid credentials"
-	}
-	if layout == "" {
-		return c.Render(page, fMap)
-	} else {
-		return c.Render(page, fMap, layout) //"layouts/login/index"
-	}
-}
 func (p *Router) HandlePage(c *fiber.Ctx, page Page, fMap fiber.Map) error {
 
 	csrfToken, ok := c.Locals("csrf").(string)
@@ -82,7 +62,10 @@ func (p *Router) HandlePage(c *fiber.Ctx, page Page, fMap fiber.Map) error {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 	fMap["csrf"] = csrfToken
+	fMap["StaticURL"] = "/static/"
 	fMap["Title"] = page.Title
+	fMap["err"] = page.Err
+
 	if page.Layout == "" {
 		return c.Render(page.Page, fMap)
 	} else {
