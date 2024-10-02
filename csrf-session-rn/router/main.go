@@ -50,7 +50,7 @@ func (p *Router) SetupRoutes(app *fiber.App) {
 
 }
 
-func (p *Router) HandleErrorPage(c *fiber.Ctx, page string, msg string, layout string) error {
+func (p *Router) HandleErrorPage(c *fiber.Ctx, page string, err string, layout string) error {
 	// Authentication failed
 	csrfToken, ok := c.Locals("csrf").(string)
 	if !ok {
@@ -62,8 +62,21 @@ func (p *Router) HandleErrorPage(c *fiber.Ctx, page string, msg string, layout s
 		"Title":     "Login",
 		"csrf":      csrfToken,
 		"StaticURL": "/static/",
-		"error":     msg, //"Invalid credentials"
+		"error":     err, //"Invalid credentials"
 	}
+	if layout == "" {
+		return c.Render(page, fMap)
+	} else {
+		return c.Render(page, fMap, layout) //"layouts/login/index"
+	}
+}
+func (p *Router) HandlePage(c *fiber.Ctx, page string, layout string, fMap fiber.Map) error {
+
+	csrfToken, ok := c.Locals("csrf").(string)
+	if !ok {
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+	fMap["csrf"] = csrfToken
 	if layout == "" {
 		return c.Render(page, fMap)
 	} else {

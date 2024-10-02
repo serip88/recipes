@@ -20,16 +20,10 @@ func (p *Router) ProtectedRoutes(app *fiber.App) {
 			return c.Redirect("/login")
 		}
 		//E Check if the user is logged in
-
-		csrfToken, ok := c.Locals("csrf").(string)
-		if !ok {
-			return c.SendStatus(fiber.StatusInternalServerError)
-		}
-
-		return c.Render("protected", fiber.Map{
+		fMap := fiber.Map{
 			"Title": "Protected",
-			"csrf":  csrfToken,
-		})
+		}
+		return p.HandlePage(c, "protected", "", fMap)
 	})
 
 	// Route for processing the protected form
@@ -46,18 +40,12 @@ func (p *Router) ProtectedRoutes(app *fiber.App) {
 			return c.Redirect("/login")
 		}
 
-		csrfToken, ok := c.Locals("csrf").(string)
-		if !ok {
-			return c.SendStatus(fiber.StatusInternalServerError)
-		}
-
 		// Retrieve the submitted form data
 		message := c.FormValue("message")
-
-		return c.Render("protected", fiber.Map{
+		fMap := fiber.Map{
 			"Title":   "Protected",
-			"csrf":    csrfToken,
 			"message": message,
-		})
+		}
+		return p.HandlePage(c, "protected", "", fMap)
 	})
 }
