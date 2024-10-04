@@ -77,16 +77,19 @@ func (p *Router) AuthRoutes(app *fiber.App) {
 		}
 		fMap := fiber.Map{}
 		user := &servicev1.User{}
-		if res, err := p.ServiceCli.GetUser(context.Background(), req); err == nil {
+		if res, err := p.ServiceCli.GetUser(context.Background(), req); err != nil {
+			fmt.Println("Login fails...", err.Error())
+			loginPage.Error = err.Error()
+			return p.HandlePage(c, loginPage, fMap)
+			// return err
+		} else {
 			user = res.User
 			fmt.Println("Res User...", res.User)
 			if user == nil {
 				loginPage.Error = "User Not Found."
 				return p.HandlePage(c, loginPage, fMap)
 			}
-		} else {
-			fmt.Println("Login fails...", err.Error())
-			return err
+
 		}
 		fmt.Println("End Post login...")
 		//E get user from service
