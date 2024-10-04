@@ -2,3 +2,4 @@
 app
 .env
 .sqlite
+node_modules
