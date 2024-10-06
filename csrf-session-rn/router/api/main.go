@@ -37,16 +37,9 @@ func (p *Router) SetupRoutes(app *fiber.App) {
 	// p.AuthRoutes(app)
 }
 func (p *Router) CtxCheckCsrf(c *fiber.Ctx) error {
-	//B check csrf
-	csrfHeader := c.Get("x-csrf-token")
-	csrfCookie := c.Cookies("__Host-csrf")
-	csrfSession := util.GetCsrf(p.Store, c)
-	//E check csrf
-	if csrfSession != csrfHeader { //csrfSession != csrfCookie
+	if !util.FiberCheckCsrf(c, p.Store) {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
-	fmt.Println("csrf...csrfCookie.", csrfHeader, csrfSession, csrfCookie)
-
 	return c.Next()
 }
 func (p *Router) Login(c *fiber.Ctx) error {

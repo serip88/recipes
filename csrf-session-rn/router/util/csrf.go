@@ -85,3 +85,15 @@ func GetCsrf(store *session.Store, c *fiber.Ctx) string {
 	// E get session
 	return csrfSession
 }
+func FiberCheckCsrf(c *fiber.Ctx, store *session.Store) bool {
+	//B check csrf
+	csrfHeader := c.Get("x-csrf-token")
+	csrfCookie := c.Cookies("__Host-csrf")
+	csrfSession := GetCsrf(store, c)
+	//E check csrf
+	if csrfSession != csrfHeader { //csrfSession != csrfCookie
+		return false
+	}
+	fmt.Println("csrf...csrfCookie.", csrfHeader, csrfSession, csrfCookie)
+	return true
+}
