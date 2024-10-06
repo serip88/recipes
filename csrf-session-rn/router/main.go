@@ -4,6 +4,8 @@ import (
 	"csrf-session-rn/router/util"
 	"fmt"
 
+	router_api "csrf-session-rn/router/api"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
 
@@ -50,6 +52,8 @@ func (p *Router) SetupRoutes(app *fiber.App) {
 			"Title": "Index",
 		})
 	})
+	api := router_api.New(p.ServiceCli, p.Store, p.CsrfMiddleware)
+	api.SetupRoutes(app)
 	//Set module routes
 	p.PublicRoutes(app)
 	p.AuthRoutes(app)

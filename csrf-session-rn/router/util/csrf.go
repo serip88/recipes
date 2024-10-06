@@ -63,6 +63,7 @@ func MakeCsrf(store *session.Store) func(*fiber.Ctx) error {
 		Expiration:     30 * time.Minute,
 	}
 	//Using for JS framework: Overide setting
+	// -> this way not working for postman
 	csrfConfig.KeyLookup = "header:X-CSRF-Token"
 	csrfConfig.CookieHTTPOnly = false
 	csrfMiddleware := csrf.New(csrfConfig)

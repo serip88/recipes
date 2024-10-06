@@ -17,7 +17,7 @@ function redirectIndexPage(selector) {
 			e.preventDefault();
 			if (validateForm()) {
 				// window.location.href = 'index.html';
-        let url = "https://127.0.0.1:8443/public";
+        let url = "https://127.0.0.1:8443/api/login";//public
         //B get data
         const inputs = form.querySelectorAll('input');
         const formData = {};
@@ -40,8 +40,19 @@ function redirectIndexPage(selector) {
 					.then(response => response.json())
 					.then(data => {
             // B get data return
-            alert("data return");
-            alert(data);
+            switch (data?.status) {
+              case "error":
+                alert("error: "+data?.message)
+                break;
+
+                case "success":
+                  alert("success: "+data?.message)
+                break;
+            
+              default:
+                alert("default...")
+                break;
+            }
             console.log('return data...');
 						console.log(data);
 						// E get data return
