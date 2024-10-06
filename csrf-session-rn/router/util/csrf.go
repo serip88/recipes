@@ -50,6 +50,7 @@ func MakeCsrf(store *session.Store) func(*fiber.Ctx) error {
 	}
 
 	// Configure the CSRF middleware
+	//Using for Server-Side Rendering (SSR)
 	csrfConfig := csrf.Config{
 		Session:        store,
 		KeyLookup:      "form:csrf",   // In this example, we will be using a hidden input field to store the CSRF token
@@ -61,6 +62,9 @@ func MakeCsrf(store *session.Store) func(*fiber.Ctx) error {
 		ErrorHandler:   csrfErrorHandler,
 		Expiration:     30 * time.Minute,
 	}
+	//Using for JS framework: Overide setting
+	csrfConfig.KeyLookup = "header:X-CSRF-Token"
+	csrfConfig.CookieHTTPOnly = false
 	csrfMiddleware := csrf.New(csrfConfig)
 	return csrfMiddleware
 }

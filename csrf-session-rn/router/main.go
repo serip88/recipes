@@ -2,6 +2,7 @@ package router
 
 import (
 	"csrf-session-rn/router/util"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
@@ -16,6 +17,7 @@ type Router struct {
 }
 
 func New(client servicev1.AddServiceClient) *Router {
+	fmt.Println("Begin new main router...")
 	store := util.InitSessionStore()
 	csrfMiddleware := util.MakeCsrf(store)
 	return &Router{
@@ -49,6 +51,7 @@ func (p *Router) SetupRoutes(app *fiber.App) {
 		})
 	})
 	//Set module routes
+	p.PublicRoutes(app)
 	p.AuthRoutes(app)
 	p.ProtectedRoutes(app)
 	p.ManageRoutes(app)

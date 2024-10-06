@@ -58,8 +58,9 @@ func (p *Router) AuthRoutes(app *fiber.App) {
 		// Retrieve the submitted form data
 		username := c.FormValue("username")
 		password := c.FormValue("password")
+		csrf := c.FormValue("csrf")
 		//B get user from service
-		fmt.Println("username.password...", username, password)
+		fmt.Println("username.password...", username, password, csrf)
 		fmt.Println("Start Post login...")
 		req := &servicev1.Request{
 			Module: servicev1.Module_MODULE_LOGIN,
