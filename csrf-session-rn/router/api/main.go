@@ -70,6 +70,18 @@ func (p *Router) Login(c *fiber.Ctx) error {
 		if user == nil {
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "User not found", "data": err})
 		}
+		//B set session
+		session, err := p.Store.Get(c)
+		if err != nil {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+		session.Set("loggedIn", true)
+		if err := session.Save(); err != nil {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+		loggedIn, _ := session.Get("loggedIn").(bool)
+		fmt.Println("session.Get...loggedIn.", loggedIn)
+		//E set session
 		return c.JSON(fiber.Map{"status": "success", "message": "Success login", "data": user})
 
 	}
