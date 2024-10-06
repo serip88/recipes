@@ -3,7 +3,8 @@ package router
 import (
 	"context"
 	"fmt"
-	"strings"
+
+	"csrf-session-rn/router/util"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -36,20 +37,12 @@ func (p *Router) SetupRoutes(app *fiber.App) {
 	// p.AuthRoutes(app)
 }
 func (p *Router) CtxCheckCsrf(c *fiber.Ctx) error {
+	//B check csrf
 	csrfHeader := c.Get("x-csrf-token")
 	csrfCookie := c.Cookies("__Host-csrf")
-	//B get session
-	session, err := p.Store.Get(c)
-	if err != nil {
-		return c.SendStatus(fiber.StatusInternalServerError)
-	}
-	csrfSessionI := session.Get("fiber.csrf.token")
-	csrfSessionStr := strings.ReplaceAll(fmt.Sprint(csrfSessionI), "{", "")
-	csrfSessionStr = strings.ReplaceAll(csrfSessionStr, "}", "")
-	csrfSessionStrs := strings.Split(csrfSessionStr, " ")
-	csrfSession := csrfSessionStrs[0]
-	//E get session
-	if csrfSession != csrfHeader {
+	csrfSession := util.GetCsrf(p.Store, c)
+	//E check csrf
+	if csrfSession != csrfHeader { //csrfSession != csrfCookie
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 	fmt.Println("csrf...csrfCookie.", csrfHeader, csrfSession, csrfCookie)

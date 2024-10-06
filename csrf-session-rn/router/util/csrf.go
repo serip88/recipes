@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -67,4 +68,20 @@ func MakeCsrf(store *session.Store) func(*fiber.Ctx) error {
 	// csrfConfig.CookieHTTPOnly = false
 	csrfMiddleware := csrf.New(csrfConfig)
 	return csrfMiddleware
+}
+
+func GetCsrf(store *session.Store, c *fiber.Ctx) string {
+	// B get session
+	csrfSession := ""
+	session, err := store.Get(c)
+	if err != nil {
+		return csrfSession
+	}
+	csrfSessionI := session.Get("fiber.csrf.token")
+	csrfSessionStr := strings.ReplaceAll(fmt.Sprint(csrfSessionI), "{", "")
+	csrfSessionStr = strings.ReplaceAll(csrfSessionStr, "}", "")
+	csrfSessionStrs := strings.Split(csrfSessionStr, " ")
+	csrfSession = csrfSessionStrs[0]
+	// E get session
+	return csrfSession
 }
