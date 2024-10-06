@@ -3,6 +3,7 @@ package router
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -28,13 +29,35 @@ func New(client servicev1.AddServiceClient, store *session.Store, csrfMiddleware
 
 // SetupRoutes setup router api
 func (p *Router) SetupRoutes(app *fiber.App) {
-	// @TODO: JS framework if else case csrf or jwt
-	apiGroup := app.Group("/api", p.CsrfMiddleware, logger.New())
+	// @TODO: Check JS framework if not working csrf and HTTPOnly: true => change to jwt
+	// apiGroup := app.Group("/api", p.CsrfMiddleware, logger.New())
+	apiGroup := app.Group("/api", logger.New(), p.CtxCheckCsrf)
 	apiGroup.Post("/login", p.Login)
 	// p.AuthRoutes(app)
 }
+func (p *Router) CtxCheckCsrf(c *fiber.Ctx) error {
+	csrfHeader := c.Get("x-csrf-token")
+	csrfCookie := c.Cookies("__Host-csrf")
+	//B get session
+	session, err := p.Store.Get(c)
+	if err != nil {
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+	csrfSessionI := session.Get("fiber.csrf.token")
+	csrfSessionStr := strings.ReplaceAll(fmt.Sprint(csrfSessionI), "{", "")
+	csrfSessionStr = strings.ReplaceAll(csrfSessionStr, "}", "")
+	csrfSessionStrs := strings.Split(csrfSessionStr, " ")
+	csrfSession := csrfSessionStrs[0]
+	//E get session
+	if csrfSession != csrfHeader {
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+	fmt.Println("csrf...csrfCookie.", csrfHeader, csrfSession, csrfCookie)
 
+	return c.Next()
+}
 func (p *Router) Login(c *fiber.Ctx) error {
+
 	type LoginInput struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
