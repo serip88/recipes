@@ -38,7 +38,8 @@ func (p *Router) SetupRoutes(app *fiber.App) {
 }
 func (p *Router) CtxCheckCsrf(c *fiber.Ctx) error {
 	if !util.FiberCheckCsrf(c, p.Store) {
-		return c.SendStatus(fiber.StatusInternalServerError)
+		// return c.SendStatus(fiber.StatusInternalServerError)
+		return c.SendStatus(fiber.StatusForbidden)
 	}
 	return c.Next()
 }
