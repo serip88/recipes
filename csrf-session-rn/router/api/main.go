@@ -14,12 +14,12 @@ import (
 )
 
 type Router struct {
-	ServiceCli     servicev1.AddServiceClient
+	ServiceCli     servicev1.CommonServiceClient
 	Store          *session.Store
 	CsrfMiddleware func(*fiber.Ctx) error
 }
 
-func New(client servicev1.AddServiceClient, store *session.Store, csrfMiddleware func(*fiber.Ctx) error) *Router {
+func New(client servicev1.CommonServiceClient, store *session.Store, csrfMiddleware func(*fiber.Ctx) error) *Router {
 	fmt.Println("Begin api main router...")
 	return &Router{
 		ServiceCli:     client,

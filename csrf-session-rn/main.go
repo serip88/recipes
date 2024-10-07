@@ -31,7 +31,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	client := servicev1.NewAddServiceClient(conn)
+	client := servicev1.NewCommonServiceClient(conn)
 	fmt.Println("Start client...")
 	//B test client
 

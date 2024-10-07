@@ -13,12 +13,12 @@ import (
 )
 
 type Router struct {
-	ServiceCli     servicev1.AddServiceClient
+	ServiceCli     servicev1.CommonServiceClient
 	Store          *session.Store
 	CsrfMiddleware func(*fiber.Ctx) error
 }
 
-func New(client servicev1.AddServiceClient) *Router {
+func New(client servicev1.CommonServiceClient) *Router {
 	fmt.Println("Begin new main router...")
 	store := util.InitSessionStore()
 	csrfMiddleware := util.MakeCsrf(store)
