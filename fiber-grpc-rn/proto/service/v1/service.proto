@@ -30,7 +30,7 @@ enum Module {
     MODULE_LOGIN = 1;
 }
 
-service AddService {
+service CommonService {
     rpc Add(Request) returns (Response);
     rpc Multiply(Request) returns (Response);
     rpc GetUser(Request) returns (Response);

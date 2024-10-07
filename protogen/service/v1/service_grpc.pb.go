@@ -14,158 +14,158 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// AddServiceClient is the client API for AddService service.
+// CommonServiceClient is the client API for CommonService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type AddServiceClient interface {
+type CommonServiceClient interface {
 	Add(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
 	Multiply(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
 	GetUser(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
 }
 
-type addServiceClient struct {
+type commonServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewAddServiceClient(cc grpc.ClientConnInterface) AddServiceClient {
-	return &addServiceClient{cc}
+func NewCommonServiceClient(cc grpc.ClientConnInterface) CommonServiceClient {
+	return &commonServiceClient{cc}
 }
 
-func (c *addServiceClient) Add(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+func (c *commonServiceClient) Add(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/service.v1.AddService/Add", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.v1.CommonService/Add", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *addServiceClient) Multiply(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+func (c *commonServiceClient) Multiply(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/service.v1.AddService/Multiply", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.v1.CommonService/Multiply", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *addServiceClient) GetUser(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+func (c *commonServiceClient) GetUser(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/service.v1.AddService/GetUser", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.v1.CommonService/GetUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// AddServiceServer is the server API for AddService service.
-// All implementations must embed UnimplementedAddServiceServer
+// CommonServiceServer is the server API for CommonService service.
+// All implementations must embed UnimplementedCommonServiceServer
 // for forward compatibility
-type AddServiceServer interface {
+type CommonServiceServer interface {
 	Add(context.Context, *Request) (*Response, error)
 	Multiply(context.Context, *Request) (*Response, error)
 	GetUser(context.Context, *Request) (*Response, error)
-	mustEmbedUnimplementedAddServiceServer()
+	mustEmbedUnimplementedCommonServiceServer()
 }
 
-// UnimplementedAddServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedAddServiceServer struct {
+// UnimplementedCommonServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedCommonServiceServer struct {
 }
 
-func (UnimplementedAddServiceServer) Add(context.Context, *Request) (*Response, error) {
+func (UnimplementedCommonServiceServer) Add(context.Context, *Request) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
 }
-func (UnimplementedAddServiceServer) Multiply(context.Context, *Request) (*Response, error) {
+func (UnimplementedCommonServiceServer) Multiply(context.Context, *Request) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Multiply not implemented")
 }
-func (UnimplementedAddServiceServer) GetUser(context.Context, *Request) (*Response, error) {
+func (UnimplementedCommonServiceServer) GetUser(context.Context, *Request) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
-func (UnimplementedAddServiceServer) mustEmbedUnimplementedAddServiceServer() {}
+func (UnimplementedCommonServiceServer) mustEmbedUnimplementedCommonServiceServer() {}
 
-// UnsafeAddServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to AddServiceServer will
+// UnsafeCommonServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CommonServiceServer will
 // result in compilation errors.
-type UnsafeAddServiceServer interface {
-	mustEmbedUnimplementedAddServiceServer()
+type UnsafeCommonServiceServer interface {
+	mustEmbedUnimplementedCommonServiceServer()
 }
 
-func RegisterAddServiceServer(s grpc.ServiceRegistrar, srv AddServiceServer) {
-	s.RegisterService(&AddService_ServiceDesc, srv)
+func RegisterCommonServiceServer(s grpc.ServiceRegistrar, srv CommonServiceServer) {
+	s.RegisterService(&CommonService_ServiceDesc, srv)
 }
 
-func _AddService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CommonService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AddServiceServer).Add(ctx, in)
+		return srv.(CommonServiceServer).Add(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.v1.AddService/Add",
+		FullMethod: "/service.v1.CommonService/Add",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AddServiceServer).Add(ctx, req.(*Request))
+		return srv.(CommonServiceServer).Add(ctx, req.(*Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AddService_Multiply_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CommonService_Multiply_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AddServiceServer).Multiply(ctx, in)
+		return srv.(CommonServiceServer).Multiply(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.v1.AddService/Multiply",
+		FullMethod: "/service.v1.CommonService/Multiply",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AddServiceServer).Multiply(ctx, req.(*Request))
+		return srv.(CommonServiceServer).Multiply(ctx, req.(*Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AddService_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CommonService_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AddServiceServer).GetUser(ctx, in)
+		return srv.(CommonServiceServer).GetUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.v1.AddService/GetUser",
+		FullMethod: "/service.v1.CommonService/GetUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AddServiceServer).GetUser(ctx, req.(*Request))
+		return srv.(CommonServiceServer).GetUser(ctx, req.(*Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// AddService_ServiceDesc is the grpc.ServiceDesc for AddService service.
+// CommonService_ServiceDesc is the grpc.ServiceDesc for CommonService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var AddService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "service.v1.AddService",
-	HandlerType: (*AddServiceServer)(nil),
+var CommonService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "service.v1.CommonService",
+	HandlerType: (*CommonServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Add",
-			Handler:    _AddService_Add_Handler,
+			Handler:    _CommonService_Add_Handler,
 		},
 		{
 			MethodName: "Multiply",
-			Handler:    _AddService_Multiply_Handler,
+			Handler:    _CommonService_Multiply_Handler,
 		},
 		{
 			MethodName: "GetUser",
-			Handler:    _AddService_GetUser_Handler,
+			Handler:    _CommonService_GetUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
