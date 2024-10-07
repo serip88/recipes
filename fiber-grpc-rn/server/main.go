@@ -14,7 +14,7 @@ import (
 )
 
 type server struct {
-	proto.UnimplementedAddServiceServer
+	proto.UnimplementedCommonServiceServer
 }
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 	//conect db
 	database.ConnectDB()
 	srv := grpc.NewServer()
-	proto.RegisterAddServiceServer(srv, &server{})
+	proto.RegisterCommonServiceServer(srv, &server{})
 	reflection.Register(srv)
 
 	if err := srv.Serve(lis); err != nil {

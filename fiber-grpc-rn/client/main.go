@@ -22,7 +22,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	client := proto.NewAddServiceClient(conn)
+	client := proto.NewCommonServiceClient(conn)
 
 	// g := gin.Default()
 	app := fiber.New()
