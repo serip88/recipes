@@ -79,8 +79,6 @@ func (p *Router) Login(c *fiber.Ctx) error {
 		if err := session.Save(); err != nil {
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
-		loggedIn, _ := session.Get("loggedIn").(bool)
-		fmt.Println("session.Get...loggedIn.", loggedIn)
 		//E set session
 		return c.JSON(fiber.Map{"status": "success", "message": "Success login", "data": user})
 
